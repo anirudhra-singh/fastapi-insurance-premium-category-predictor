@@ -107,6 +107,8 @@ def sort_patients(
     )
     return sorted_data
 
+
+# create endpoint
 @app.post('/create')
 def create_patient(patient: Patient):
     
@@ -120,7 +122,7 @@ def create_patient(patient: Patient):
     return JSONResponse(status_code=201,content={'message': "patient created succesfully"})
 
 
-
+# edit endpoint
 @app.put('/edit/{patient_id}')
 def update_patient(patient_id: str, patient_update: PatientUpdate):
 
@@ -148,3 +150,18 @@ def update_patient(patient_id: str, patient_update: PatientUpdate):
 
     return JSONResponse(status_code=200, content={'message':'patient updated'})
 
+
+
+# delete endpoint
+@app.delete('/delete{patient_id}')
+def delete_patient(patient_id: str):
+
+    data = load_data()
+
+    if patient_id not in data:
+        raise HTTPException(status_code=404,detail='patient not found')
+    
+    del data[patient_id]
+
+    save_data(data)
+    return JSONResponse(status_code=200,content={'message':'patient deleted'})
