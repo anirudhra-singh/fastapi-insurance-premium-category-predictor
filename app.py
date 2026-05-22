@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from schema.user_input import UserInput
+from schema.prediction_response import PredictionResponse
 from model.predict import predict_output , model , MODEL_VERSION
 
 app = FastAPI()
@@ -23,7 +24,7 @@ def health_check():
 
 
 # prediction endpoint
-@app.post('/predict')
+@app.post('/predict', response_model=PredictionResponse)
 def predict_premium(data: UserInput):
 
     user_input = {
@@ -34,7 +35,7 @@ def predict_premium(data: UserInput):
         'income_lpa': data.income_lpa,
         'occupation': data.occupation
     }
-    
+ 
     try:
 
         prediction = predict_output(user_input)
