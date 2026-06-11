@@ -19,8 +19,8 @@ class UserInput(BaseModel):
     @field_validator("city")
     @classmethod
     def normalize_city (cls,v:str) ->str:
-        v = v.strip(),v.title()
-        return v
+          v = v.strip().title()
+          return v
 
     
     @computed_field

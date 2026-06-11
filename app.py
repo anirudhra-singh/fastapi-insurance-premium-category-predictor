@@ -4,8 +4,7 @@ from schema.user_input import UserInput
 from schema.prediction_response import PredictionResponse
 from model.predict import predict_output , model , MODEL_VERSION
 
-app = FastAPI()
-
+app = FastAPI(title="Insurance Premium Category Predictor")
 
 
 @app.get('/')

@@ -1,5 +1,5 @@
 import pickle
-import pandas as pd 
+import pandas as pd
 
 
 #ml model
