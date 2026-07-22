@@ -8,7 +8,7 @@ load_dotenv()
 API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/predict")
 
 st.title("Insurance Premium Category Predictor")
-st.markdown("Enter your details below:")
+st.markdown("## Enter your details below:")
 
 age = st.number_input("Age", min_value=1, max_value=119, value=30)
 weight = st.number_input("Weight (kg)", min_value=1.0, value=65.0)
@@ -33,18 +33,73 @@ if st.button("Predict Premium Category"):
         "income_lpa": income_lpa,
         "smoker": smoker,
         "city": city,
-        "occupation": occupation
+        "occupation": occupation,
     }
 
     try:
-        response = requests.post(API_URL, json=input_data, timeout=5)
+
+        with st.spinner("Predicting..."):
+            response = requests.post(API_URL, json=input_data, timeout=5,)
 
         if response.status_code == 200:
+
             result = response.json()
-            st.success(f"Predicted Category: **{result['predicted_category']}**")
+
+            category = result["predicted_category"]
+            confidence = result["confidence"]
+            probabilities = result["class_probabilities"]
+
+            st.markdown("---")
+            st.subheader("Prediction Result")
+
+            # Category Card
+            if category.lower() == "low":
+                st.success(f" Predicted Category: **{category}**")
+            elif category.lower() == "medium":
+                st.warning(f"Predicted Category: **{category}**")
+            else:
+                st.error(f"Predicted Category: **{category}**")
+
+            # Metrics
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.metric(
+                    label="Confidence",
+                    value=f"{confidence * 100:.1f}%"
+                )
+
+            with col2:
+                st.metric(
+                    label="Category",
+                    value=category
+                )
+
+            st.markdown("### Class Probabilities")
+
+            for cls, prob in probabilities.items():
+                st.write(f"**{cls}**")
+                st.progress(float(prob))
+                st.caption(f"{prob * 100:.1f}%")
+
+            st.markdown("### Prediction Summary")
+
+            st.info(
+                f"""
+**Category:** {category}
+
+**Confidence:** {confidence * 100:.1f}%
+
+ Prediction generated successfully.
+"""
+            )
+
         else:
-            st.error(f"API Error: {response.status_code}")
+            st.error(f"❌ API Error: {response.status_code}")
             st.write(response.json())
 
     except requests.exceptions.ConnectionError:
         st.error("❌ Could not connect to FastAPI server. Is it running?")
+
+    except Exception as e:
+        st.error(f"Unexpected Error: {e}")

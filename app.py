@@ -4,7 +4,8 @@ from schema.user_input import UserInput
 from schema.prediction_response import PredictionResponse
 from model.predict import predict_output , model , MODEL_VERSION
 
-app = FastAPI(title="Insurance Premium Category Predictor")
+app = FastAPI(title="Insurance Premium Category Predictor",
+              version="1.0.0")
 
 
 @app.get('/')
@@ -38,7 +39,7 @@ def predict_premium(data: UserInput):
     try:
 
         prediction = predict_output(user_input)
-        return JSONResponse(status_code=200, content={'predicted_category': prediction})
+        return JSONResponse(status_code=200, content=prediction)
 
     except Exception as e :
 
