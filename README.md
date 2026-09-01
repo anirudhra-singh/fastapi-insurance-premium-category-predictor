@@ -24,9 +24,12 @@ This is a **learning project** I built to understand how a trained Machine Learn
 - **Pickle** — Saving and loading the trained ML model
 - **Jupyter Notebook** — Model development and experimentation
 
-### DevOps
+### DevOps & Cloud
 - **Docker** — Containerization
-- **Docker Compose** — Running the FastAPI backend and Streamlit frontend together
+- **Docker Compose** — Running frontend and backend as separate services
+- **AWS EC2** — Cloud deployment
+- **Ubuntu** — Operating system used on the EC2 instance
+- **SSH** — Secure connection to the EC2 server
 
 ### Tools
 - **Git & GitHub** — Version control
@@ -96,3 +99,43 @@ Prediction Result
         │
         ▼
 Streamlit Dashboard
+
+##  Deployment 
+
+The FastAPI backend and trained Machine Learning model were containerized using Docker and deployed on an AWS EC2 instance.
+
+### Deployment Flow
+
+```text
+Local Development
+       │
+       ▼
+Docker Image
+       │
+       ▼
+Docker Hub
+       │
+       ▼
+AWS EC2
+       │
+       ▼
+Docker Container
+       │
+       ▼
+FastAPI + ML Model
+       │
+       ▼
+Streamlit Frontend
+```
+
+### Steps
+
+1. Built separate Docker images for the FastAPI backend and Streamlit frontend
+2. Pushed the images to Docker Hub
+3. Launched an AWS EC2 (Ubuntu) instance
+4. Connected to the instance via SSH
+5. Pulled the Docker images onto the EC2 instance
+6. Ran the containers using Docker Compose
+7. Exposed the required ports to access the app publicly
+
+---
